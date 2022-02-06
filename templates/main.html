@@ -131,153 +131,146 @@
 		<a href="#"><img src="https://i.imgur.com/Ad9ZBkk.png"></a>
 	<h1 align="right">Calculate your worth. Get Paid.</h1>
   </div>  
-  <nav class="site-navigation">
-    <ul class="nav">
-      <li><a href="#">About</a></li> 
-      <li><a href="#">News</a></li> 
-      <li><a href="#">Contact</a></li> 
-    </ul>
-  </nav>
+
 </header>
 
 	<!-- Create Form -->
-	<form id="form">
+	<form action="{{ url_for('main') }}" method="POST">
 
-		<!-- Details -->
-		<div class="form-control">
-			<label for="name" id="label-name">
-				Yearly Salary
-			</label>
+			<!-- Details -->
+			<div class="form-control">
+				<label for="salary" id="label-salary">
+					Yearly Salary
+				</label>
 
-			<!-- Input Type Text -->
-			<input type="text"
-				id="name"
-				placeholder="Enter your salary" />
-		</div>
-
-		<div class="form-control">
-			<label for="role" id="label-role">
-				Select your gender:
-			</label>
-			
-			<!-- Dropdown options -->
-			<select name="role" id="role">
-				<option value="male">Male</option>
-				<option value="female">Female</option>
-				<option value="nonBinary">NonBinary</option>
-				<option value="other">Other</option>
-			</select>
-		</div>
-
-		<div class="form-control">
-			<label for="age" id="label-age">
-				Age
-			</label>
-
-			<!-- Input Type Text -->
-			<input type="text"
-				id="age"
-				placeholder="Enter your age" />
-		</div>
-
-		<div class="form-control">
-			<label for="role" id="label-role">
-				Select your employment:
-			</label>
-			
-			<!-- Dropdown options -->
-			<select name="role" id="role">
-				<option value="student">Student</option>
-				<option value="intern">Intern</option>
-				<option value="professional">
-					Professional
-				</option>
-				<option value="other">Other</option>
-			</select>
-		</div>
-
-		<div class="form-control">
-			<label>
-				Have you served in the military?
-			</label>
-
-			<!-- Input Type Radio Button -->
-			<label for="recommed-1">
-				<input type="radio"
-					id="recommed-1"
-					name="recommed">Yes</input>
-			</label>
-			<label for="recommed-2">
-				<input type="radio"
-					id="recommed-2"
-					name="recommed">No</input>
-			</label>
-			<label for="recommed-3">
-				<input type="radio"
-					id="recommed-3"
-					name="recommed">Maybe</input>
-			</label>
-		</div>
-
-		<div class="form-control">
-			<label>What is your race?</label>
-			<!-- Input Type Checkbox -->
-			<label for="inp-1">
-				<input type="radio"
-					name="inp">White</input></label>
-			<label for="inp-2">
-				<input type="radio"
-					name="inp">Hawaiian/Pacific Islander only</input></label>
-			<label for="inp-3">
-				<input type="radio"
-					name="inp">Black</input></label>
-			<label for="inp-4">
-				<input type="radio"
-					name="inp">American Indian/Aleut/Eskimo</input></label>
-			<label for="inp-5">
-				<input type="radio"
-					name="inp">Asian or Pacific Islander</input></label>
-			<label for="inp-6">
-				<input type="radio"
-					name="inp">Other (single) race</input></label>
-			<label for="inp-7">
-				<input type="radio"
-					name="inp">Two or more races</input></label>
-		</div>
-		<div class="form-control">
-		<label for="email" id="txtAutoComplete">
-				Location
-			</label>
-		<input type="text" id="txtAutoComplete" placeholder="Enter your State" list="StateList"/><!--your input textbox-->
-			<datalist id="StateList">
-			<option value="Alabama" />
-			<option value="Alaska" />
-			<option value="Arizona" />
-			<option value="Arkansas" />
-			<option value="California" />
-			<option value="Colorado" />
-			<option value="Bootstrap" />
-			<option value="Angular" />
-			<option value="ASP.NET" />
-			<option value="XML" />
-			</datalist>
+				<!-- Input Type Text -->
+				<input type="number" name="salary" placeholder="Enter your salary" required />
 			</div>
 
-		<div class="form-control">
-			<label for="comment">
-				Any comments or suggestions
-			</label>
+			<div class="form-control">
+				<label for="gender" id="label-gender">
+					Select your gender:
+				</label>
 
-			<!-- multi-line text input control -->
-			<textarea name="comment" id="comment"
-				placeholder="Enter your comment here">
+				<!-- Dropdown options -->
+				<select name="gender" id="gender" required>
+					<option value="male">Male</option>
+					<option value="female">Female</option>
+					<option value="nonBinary">NonBinary</option>
+					<option value="other">Other</option>
+				</select>
+			</div>
+
+			<div class="form-control">
+				<label for="age" id="label-age">
+					Age
+				</label>
+
+				<!-- Input Type Text -->
+				<input type="number"
+					   name="age"
+					   placeholder="Enter your age" required />
+			</div>
+
+			<div class="form-control">
+				<label for="role" id="label-role">
+					Select your employment:
+				</label>
+
+				<!-- Dropdown options -->
+				<select name="role" id="role">
+					<option value="student">Student</option>
+					<option value="intern">Intern</option>
+					<option value="professional">
+						Professional
+					</option>
+					<option value="other">Other</option>
+				</select>
+			</div>
+
+			<div class="form-control">
+				<label>
+					Have you served in the military?
+				</label>
+
+				<!-- Input Type Radio Button -->
+				<label for="recommed-1">
+					<input type="radio"
+						   id="military-yes"
+						   name="military"
+						   value="Yes" required> Yes
+				</label>
+				<label for="recommed-2">
+					<input type="radio"
+						   id="military-no"
+						   name="military"
+						   value="No"> No
+				</label>
+
+			</div>
+
+			<div class="form-control">
+				<label>What is your race?</label>
+				<!-- Input Type Checkbox -->
+				<label for="race-1">
+					<input type="radio"
+						   name="race" value="White" required>White</input>
+				</label>
+				<label for="race-2">
+					<input type="radio"
+						   name="race" value="Hawaiian/Pacific Islander only">Hawaiian/Pacific Islander only</input>
+				</label>
+				<label for="race-3">
+					<input type="radio"
+						   name="race" value="'Black'">Black</input>
+				</label>
+				<label for="race-4">
+					<input type="radio"
+						   name="race" value="American Indian/Aleut/Eskimo">American Indian/Aleut/Eskimo</input>
+				</label>
+				<label for="race-5">
+					<input type="radio"
+						   name="race" value="Asian or Pacific Islander">Asian or Pacific Islander</input>
+				</label>
+				<label for="race-6">
+					<input type="radio"
+						   name="race" value="Other (single) race">Other (single) race</input>
+				</label>
+				<label for="race-7">
+					<input type="radio"
+						   name="race" value="Two or more races">Two or more races</input>
+				</label>
+			</div>
+			<div class="form-control">
+				<label for="state" id="label-state">
+					Location
+				</label>
+				<input type="text" name="state" placeholder="Enter your State" list="StateList" required /><!--your input textbox-->
+				<datalist id="StateList">
+					<option value="Alabama" />
+					<option value="Alaska" />
+					<option value="Arizona" />
+					<option value="Arkansas" />
+					<option value="California" />
+					<option value="Colorado" />
+				</datalist>
+			</div>
+
+			<div class="form-control">
+				<label for="comment">
+					Any comments or suggestions
+				</label>
+
+				<!-- multi-line text input control -->
+				<textarea name="comment" id="comment"
+						  placeholder="Enter your comment here">
 			</textarea>
-		</div>
+			</div>
 
-		<!-- Multi-line Text Input Control -->
-		<button type="submit" value="submit">
-			Submit
-		</button>
+			<!-- Multi-line Text Input Control -->
+			<button type="submit" value="submit">
+				Submit
+			</button>
 	</form>
 </body>
 </html>
