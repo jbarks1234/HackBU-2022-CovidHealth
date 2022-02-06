@@ -1,3 +1,9 @@
+"""
+
+Much of this was sourced from Cambridge Spark's tutorial at https://blog.cambridgespark.com/deploying-a-machine-learning-model-to-the-web-725688b851c7
+
+"""
+
 import flask
 import pickle
 import pandas as pd
