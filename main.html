@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content=
+		"width=device-width, initial-scale=1.0">
+	<title>
+		Build a Survey Form using HTML and CSS
+	</title>
+
+	<style>
+
+		/* Styling the Body element i.e. Color,
+		Font, Alignment */
+		body {
+			background-color: #fdfdfd;
+			font-family: Verdana;
+			text-align: center;
+		}
+		a {
+		  text-decoration: none;
+		  color: #000;
+		}
+		.site-header { 
+		  border-bottom: 1px solid #ccc;
+		  padding: .5em 1em;
+		}
+
+		.site-header::after {
+		  content: "";
+		  display: table;
+		  clear: both;
+		}		
+
+		.site-identity {
+		  float: left;
+		}
+
+		.site-identity h1 {
+		  font-size: 1.5em;
+		  align:left;
+		  display:block;
+		  display: inline-block;
+		}
+
+		.site-identity img {
+		display:block;
+		  width: 15%; 
+		  height: auto; 
+		  float: left;
+		}
+
+		.site-navigation {
+		  float: right;
+		}
+
+		.site-navigation ul, li {
+		  margin: 0; 
+		  padding: 0;
+		}
+
+		.site-navigation li {
+		  display: inline-block;
+		  margin: 1.4em 1em 1em 1em;
+		}
+
+		/* Styling the Form (Color, Padding, Shadow) */
+		form {
+			background-color: #fff;
+			max-width: 500px;
+			margin: 50px auto;
+			padding: 30px 20px;
+			box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+		}
+
+		/* Styling form-control Class */
+		.form-control {
+			text-align: left;
+			margin-bottom: 25px;
+		}
+
+		/* Styling form-control Label */
+		.form-control label {
+			display: block;
+			margin-bottom: 10px;
+		}
+
+		/* Styling form-control input,
+		select, textarea */
+		.form-control input,
+		.form-control select,
+		.form-control textarea {
+			border: 1px solid #777;
+			border-radius: 2px;
+			font-family: inherit;
+			padding: 10px;
+			display: block;
+			width: 95%;
+		}
+
+		/* Styling form-control Radio
+		button and Checkbox */
+		.form-control input[type="radio"],
+		.form-control input[type="checkbox"] {
+			display: inline-block;
+			width: auto;
+		}
+
+		/* Styling Button */
+		button {
+			background-color: #be515e;
+			border: 1px solid #777;
+			border-radius: 2px;
+			font-family: inherit;
+			font-size: 21px;
+			display: block;
+			width: 100%;
+			color: white;
+			margin-top: 50px;
+			margin-bottom: 20px;
+		}
+
+	</style>
+<script async src='/cdn-cgi/bm/cv/669835187/api.js'></script></head>
+
+<body>
+	<header class="site-header">
+  <div class="site-identity">
+		<a href="#"><img src="https://i.imgur.com/Ad9ZBkk.png"></a>
+	<h1 align="right">Calculate your worth. Get Paid.</h1>
+  </div>  
+  <nav class="site-navigation">
+    <ul class="nav">
+      <li><a href="#">About</a></li> 
+      <li><a href="#">News</a></li> 
+      <li><a href="#">Contact</a></li> 
+    </ul>
+  </nav>
+</header>
+
+	<!-- Create Form -->
+	<form id="form">
+
+		<!-- Details -->
+		<div class="form-control">
+			<label for="name" id="label-name">
+				Yearly Salary
+			</label>
+
+			<!-- Input Type Text -->
+			<input type="text"
+				id="name"
+				placeholder="Enter your salary" />
+		</div>
+
+		<div class="form-control">
+			<label for="role" id="label-role">
+				Select your gender:
+			</label>
+			
+			<!-- Dropdown options -->
+			<select name="role" id="role">
+				<option value="student">Male</option>
+				<option value="intern">Female</option>
+				<option value="professional">NonBinary</option>
+				<option value="other">Other</option>
+			</select>
+		</div>
+
+		<div class="form-control">
+			<label for="age" id="label-age">
+				Age
+			</label>
+
+			<!-- Input Type Text -->
+			<input type="text"
+				id="age"
+				placeholder="Enter your age" />
+		</div>
+
+		<div class="form-control">
+			<label for="role" id="label-role">
+				Select your employment:
+			</label>
+			
+			<!-- Dropdown options -->
+			<select name="role" id="role">
+				<option value="student">Student</option>
+				<option value="intern">Intern</option>
+				<option value="professional">
+					Professional
+				</option>
+				<option value="other">Other</option>
+			</select>
+		</div>
+
+		<div class="form-control">
+			<label>
+				Have you served in the military?
+			</label>
+
+			<!-- Input Type Radio Button -->
+			<label for="recommed-1">
+				<input type="radio"
+					id="recommed-1"
+					name="recommed">Yes</input>
+			</label>
+			<label for="recommed-2">
+				<input type="radio"
+					id="recommed-2"
+					name="recommed">No</input>
+			</label>
+			<label for="recommed-3">
+				<input type="radio"
+					id="recommed-3"
+					name="recommed">Maybe</input>
+			</label>
+		</div>
+
+		<div class="form-control">
+			<label>What is your race?</label>
+			<!-- Input Type Checkbox -->
+			<label for="inp-1">
+				<input type="radio"
+					name="inp">White</input></label>
+			<label for="inp-2">
+				<input type="radio"
+					name="inp">Hawaiian/Pacific Islander only</input></label>
+			<label for="inp-3">
+				<input type="radio"
+					name="inp">Black</input></label>
+			<label for="inp-4">
+				<input type="radio"
+					name="inp">American Indian/Aleut/Eskimo</input></label>
+			<label for="inp-5">
+				<input type="radio"
+					name="inp">Asian or Pacific Islander</input></label>
+			<label for="inp-6">
+				<input type="radio"
+					name="inp">Other (single) race</input></label>
+			<label for="inp-7">
+				<input type="radio"
+					name="inp">Two or more races</input></label>
+		</div>
+		<div class="form-control">
+		<label for="email" id="txtAutoComplete">
+				Location
+			</label>
+		<input type="text" id="txtAutoComplete" placeholder="Enter your State" list="StateList"/><!--your input textbox-->
+			<datalist id="StateList">
+			<option value="Alabama" />
+			<option value="Alaska" />
+			<option value="Arizona" />
+			<option value="Arkansas" />
+			<option value="California" />
+			<option value="Colorado" />
+			<option value="Bootstrap" />
+			<option value="Angular" />
+			<option value="ASP.NET" />
+			<option value="XML" />
+			</datalist>
+			</div>
+
+		<div class="form-control">
+			<label for="comment">
+				Any comments or suggestions
+			</label>
+
+			<!-- multi-line text input control -->
+			<textarea name="comment" id="comment"
+				placeholder="Enter your comment here">
+			</textarea>
+		</div>
+
+		<!-- Multi-line Text Input Control -->
+		<button type="submit" value="submit">
+			Submit
+		</button>
+	</form>
+<script type="text/javascript">(function(){window['__CF$cv$params']={r:'6d952787abeb811f',m:'PXLFZVE2phPmulzYIDZZO0aoqzdUf.cnNhDBRtcGUFA-1644158644-0-AYHQwQzVn9jQNMVkgZ54osmUeum0DPnm8mlBvPPN6RJs1fu3rUs+ey/f7JEm3QagC0TOlrBuLHBAQes0JRIp4/JZUy71FEmzR+TIVsffvf7s1MTpWtdFz/LX7wYuUrX923PRRivlq0LkeXwe5kUY4VAuf8UhTSsPt7omZY23NMp37plBOzL1LxB45x+6Svl4Xg==',s:[0x6a923b3bf1,0x5772b9b8ea],}})();</script></body>
+
+</html>
