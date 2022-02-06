@@ -20,21 +20,22 @@ def main():
         age = flask.request.form['age']
         role = flask.request.form['role']
         military = flask.request.form['military']
+        race = flask.request.form['race']
         state = flask.request.form['state']
 
         comment = flask.request.form.get('comment')
 
         # input_variables = pd.DataFrame([[salary,gender,age]],
-        #                                columns=['salary', 'gender', 'age'],
-        #                                # dtype=float
+        #                                columns=['salary', 'gender', 'age']
         #                                )
         # prediction = model.predict(input_variables)[0]
-        return flask.render_template('main.html')
-                                     # original_input={'salary':salary,
-                                     #                 'gender':gender,
-                                     #                 'age':age},
-                                     # result=prediction,
-                                     # )
+        prediction = 100
+        return flask.render_template('main.html',
+                                     original_input={'salary':salary,
+                                                     'gender':gender,
+                                                     'age':age},
+                                     result=prediction,
+                                     )
 
 
 if __name__ == '__main__':
