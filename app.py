@@ -8,8 +8,8 @@ import flask
 import pickle
 import pandas as pd
 # Use pickle to load in the pre-trained model.
-# with open(f'model/bike_model_xgboost.pkl', 'rb') as f:
-#     model = pickle.load(f)
+with open(f'f_model.pt', 'rb') as f:
+    model = pickle.load(f)
 
 
 app = flask.Flask(__name__, template_folder='templates')
@@ -31,16 +31,18 @@ def main():
 
         comment = flask.request.form.get('comment')
 
-        # input_variables = pd.DataFrame([[salary,gender,age]],
-        #                                columns=['salary', 'gender', 'age']
-        #                                )
-        # prediction = model.predict(input_variables)[0]
-        prediction = 100
+        input_variables = pd.DataFrame([[state,9999.0,0.0,514.0,age,gender,race,0.0, 0.0, 0.0, military, 1.0, 0.0, 0.0, 9999, 9999, 40, 0.0, 0.0]],
+                                       columns=['STATEFIP', 'METAREA', 'OWNERSHP', 'ASECWT', 'AGE', 'SEX', 'RACE', 'MARST', 'POPSTAT',
+                                  'ASIAN', 'VETSTAT', 'CITIZEN', 'HISPAN', 'NATIVITY', 'OCC2010', 'CLASSWKR',
+                                  'UHRSWORK1', 'PROFCERT', 'EDUC99', 'DIFFANY']
+                                       )
+        prediction = model.predict(input_variables)[0]
+#         prediction = 100
         return flask.render_template('main.html',
                                      original_input={'salary':salary,
                                                      'gender':gender,
                                                      'age':age},
-                                     result=prediction,
+                                     result=prediction-salary,
                                      )
 
 
