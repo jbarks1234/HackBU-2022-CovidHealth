@@ -141,27 +141,27 @@
 </header>
 
 	<!-- Create Form -->
-	<form id="form" action="{{ url_for('main') }}" method="POST">
+	<form id="form">
 
 		<!-- Details -->
 		<div class="form-control">
-			<label for="name" id="label-salary">
+			<label for="name" id="label-name">
 				Yearly Salary
 			</label>
 
 			<!-- Input Type Text -->
 			<input type="text"
-				id="salary"
+				id="name"
 				placeholder="Enter your salary" />
 		</div>
 
 		<div class="form-control">
-			<label for="gender" id="label-gender">
+			<label for="role" id="label-role">
 				Select your gender:
 			</label>
 			
 			<!-- Dropdown options -->
-			<select name="gender" id="gender">
+			<select name="role" id="role">
 				<option value="male">Male</option>
 				<option value="female">Female</option>
 				<option value="nonBinary">NonBinary</option>
