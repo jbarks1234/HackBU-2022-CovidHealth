@@ -1,23 +1,20 @@
 from numpy import vstack
-from numpy import argmax
-import numpy as np
+from numpy import sqrt
 from pandas import read_csv
-from sklearn.preprocessing import LabelEncoder
+import pandas as pd
 import torch
-from sklearn.metrics import accuracy_score
-from torch import Tensor
+from sklearn.metrics import mean_squared_error
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torch.utils.data import random_split
+from torch import Tensor
 from torch.nn import Linear
-from torch.nn import ReLU
-from torch.nn import Softmax
+from torch.nn import Sigmoid
 from torch.nn import Module
 from torch.optim import SGD
-from torch.nn import CrossEntropyLoss
-from torch.nn.init import kaiming_uniform_
+from torch.nn import MSELoss
 from torch.nn.init import xavier_uniform_
-
+from sklearn.preprocessing import MinMaxScaler
 
 # dataset definition
 class CSVDataset(Dataset):
@@ -25,43 +22,27 @@ class CSVDataset(Dataset):
     def __init__(self, path):
         # load the csv file as a dataframe
         df = read_csv(path,
-                         usecols=['STATEFIP', 'METAREA', 'OWNERSHP', 'ASECWT', 'AGE', 'SEX', 'RACE', 'MARST', 'POPSTAT',
-                                  'ASIAN', 'VETSTAT', 'CITIZEN', 'HISPAN', 'NATIVITY', 'OCC2010', 'CLASSWKR',
-                                  'UHRSWORK1', 'PROFCERT', 'EDUC99', 'DIFFANY', 'INCWAGE'])
-        df = df.iloc[::7]
-
-        print(df.shape)
+                      usecols=['STATEFIP', 'AGE', 'SEX', 'RACE', 'PAIDGH', 'HICHAMP',
+                               'VETSTAT', 'NATIVITY', 'HISPAN', 'OCC2010', 'EMPSAME',
+                               'UHRSWORK1', 'PROFCERT', 'EDUC99', 'PHINSUR', 'INCWAGE'])
         # store the inputs and outputs
-        self.X = df.values[:, :-1]
-        self.y = df.values[:, -1]
-        self.y = self.y.tolist()
-        for i, val in enumerate(self.y):
-            if 20000 >= val > 0:
-                self.y[i] = 0.0
-            if 40000 >= val > 20000:
-                self.y[i] = 1.0
-            if 60000 >= val > 40000:
-                self.y[i] = 2.0
-            if 80000 >= val > 60000:
-                self.y[i] = 3.0
-            if 100000 >= val > 80000:
-                self.y[i] = 4.0
-            if 150000 >= val > 100000:
-                self.y[i] = 5.0
-            if val > 150000:
-                self.y[i] = 6.0
+        df = df[['STATEFIP', 'AGE', 'SEX', 'RACE', 'PAIDGH', 'HICHAMP',
+                               'VETSTAT', 'NATIVITY', 'HISPAN', 'OCC2010', 'EMPSAME',
+                               'UHRSWORK1', 'PROFCERT', 'EDUC99', 'PHINSUR', 'INCWAGE']]
+        # x = df['INCWAGE'].values.reshape(-1, 1)
+        # x_scaled = scaler.fit_transform(x)
+        # df_temp = pd.DataFrame(x_scaled, columns='INCWAGE', index=df.index)
+        # df['INCWAGE'] = df_temp
+        x_scaled = scaler.fit_transform(df['INCWAGE'].values.reshape(-1, 1))
+        df['INCWAGE'] = pd.DataFrame(x_scaled)
 
-        self.y = np.array(self.y)
-
-        # ensure input data is floats
-        self.X = self.X.astype('float32')
-
+        self.X = df.values[:, :-1].astype('float32')
+        self.y = df.values[:, -1].astype('float32')
+        print(self.X)
+        # ensure target has the right shape
+        self.y = self.y.reshape((len(self.y), 1))
         print(self.y)
 
-
-        # label encode target and ensure the values are floats
-
-        print(self.y)
     # number of rows in the dataset
     def __len__(self):
         return len(self.X)
@@ -85,20 +66,16 @@ class MLP(Module):
     def __init__(self, n_inputs):
         super(MLP, self).__init__()
         # input to first hidden layer
-        self.hidden1 = Linear(n_inputs, 32)
-        kaiming_uniform_(self.hidden1.weight, nonlinearity='relu')
-        self.act1 = ReLU()
+        self.hidden1 = Linear(n_inputs, 10)
+        xavier_uniform_(self.hidden1.weight)
+        self.act1 = Sigmoid()
         # second hidden layer
-        self.hidden2 = Linear(32, 16)
-        kaiming_uniform_(self.hidden2.weight, nonlinearity='relu')
-        self.act2 = ReLU()
-        self.hidden3 = Linear(16, 12)
-        kaiming_uniform_(self.hidden3.weight, nonlinearity='relu')
-        self.act3 = ReLU()
+        self.hidden2 = Linear(10, 8)
+        xavier_uniform_(self.hidden2.weight)
+        self.act2 = Sigmoid()
         # third hidden layer and output
-        self.hidden4 = Linear(12, 7)
-        xavier_uniform_(self.hidden4.weight)
-        self.act4 = Softmax(dim=1)
+        self.hidden3 = Linear(8, 1)
+        xavier_uniform_(self.hidden3.weight)
 
     # forward propagate input
     def forward(self, X):
@@ -108,11 +85,8 @@ class MLP(Module):
         # second hidden layer
         X = self.hidden2(X)
         X = self.act2(X)
-        # output layer
+        # third hidden layer and output
         X = self.hidden3(X)
-        X = self.act3(X)
-        X = self.hidden4(X)
-        X = self.act4(X)
         return X
 
 
@@ -121,7 +95,6 @@ def prepare_data(path):
     # load the dataset
     dataset = CSVDataset(path)
     # calculate split
-
     train, test = dataset.get_splits()
     # prepare data loaders
     train_dl = DataLoader(train, batch_size=32, shuffle=True)
@@ -132,14 +105,15 @@ def prepare_data(path):
 # train the model
 def train_model(train_dl, model):
     # define the optimization
-    criterion = CrossEntropyLoss()
+    criterion = MSELoss()
     optimizer = SGD(model.parameters(), lr=0.01, momentum=0.9)
     # enumerate epochs
     for epoch in range(20):
         print(epoch, " : epoch completed")
+        running_loss = 0
+
         # enumerate mini batches
         for i, (inputs, targets) in enumerate(train_dl):
-            targets = targets.type(torch.LongTensor)
             # clear the gradients
             optimizer.zero_grad()
             # compute the model output
@@ -151,6 +125,9 @@ def train_model(train_dl, model):
             # update model weights
             optimizer.step()
 
+            running_loss += loss.item() * inputs.size(0)
+
+        print("Train MSE loss: {:.4f}".format(running_loss / len(train_dl.dataset)))
 
 # evaluate the model
 def evaluate_model(test_dl, model):
@@ -161,18 +138,14 @@ def evaluate_model(test_dl, model):
         # retrieve numpy array
         yhat = yhat.detach().numpy()
         actual = targets.numpy()
-        # convert to class labels
-        yhat = argmax(yhat, axis=1)
-        # reshape for stacking
         actual = actual.reshape((len(actual), 1))
-        yhat = yhat.reshape((len(yhat), 1))
         # store
         predictions.append(yhat)
         actuals.append(actual)
     predictions, actuals = vstack(predictions), vstack(actuals)
-    # calculate accuracy
-    acc = accuracy_score(actuals, predictions)
-    return acc
+    # calculate mse
+    mse = mean_squared_error(actuals, predictions)
+    return mse
 
 
 # make a class prediction for one row of data
@@ -187,18 +160,23 @@ def predict(row, model):
 
 
 # prepare the data
-path = './output_final.csv'
+scaler = MinMaxScaler()
+path = './output_final_v3.csv'
 train_dl, test_dl = prepare_data(path)
 print(len(train_dl.dataset), len(test_dl.dataset))
 # define the network
-model = MLP(20)
+model = MLP(15)
 # train the model
-train_model(train_dl, model)
-# evaluate the model
-acc = evaluate_model(test_dl, model)
-torch.save(model.state_dict(), './f_model.pt')
-print('Accuracy: %.3f' % acc)
-# make a single prediction
-row = [5.1, 3.5, 1.4, 0.2]
-yhat = predict(row, model)
-print('Predicted: %s (class=%d)' % (yhat, argmax(yhat)))
+# train_model(train_dl, model)
+# # evaluate the model
+# mse = evaluate_model(test_dl, model)
+# torch.save(model.state_dict(), './f_model_v3.pt')
+# print('MSE: %.3f, RMSE: %.3f' % (mse, sqrt(mse)))
+# model.load_state_dict(torch.load('./f_model_v3.pt'))
+#
+# # make a single prediction (expect class=1)
+# row = [34, 50.00, 2, 1, 0.0, 0.0, 0.0, 1, 0.0, 1010, 1, 40.0, 1, 16, 0.0]
+# yhat = predict(row, model)
+# print('Predicted: %.3f' % yhat)
+# print(scaler.inverse_transform(yhat)[0][0])
+# print('Predicted: %.3f' % yhat)
