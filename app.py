@@ -28,25 +28,42 @@ def main():
         salary = flask.request.form['salary']
         gender = flask.request.form['gender']
         age = flask.request.form['age']
-        role = flask.request.form['role']
+        job = flask.request.form['job']
         military = flask.request.form['military']
+        emp = flask.request.form['emp']
+        emphlth = flask.request.form['emphlth']
+        privhlth = flask.request.form['privhlth']
+        milhlth = flask.request.form['milhlth']
         race = flask.request.form['race']
+        nativ = flask.request.form['nativ']
+        hours = flask.request.form['hours']
+        educ = flask.request.form['educ']
+        prof = flask.request.form['prof']
         state = flask.request.form['state']
 
-        comment = flask.request.form.get('comment')
-
-        input_variables = pd.DataFrame([[state,9999.0,0.0,514.0,age,gender,race,0.0, 0.0, 0.0, military, 1.0, 0.0, 0.0, 9999, 9999, 40, 0.0, 0.0]],
-                                       columns=['STATEFIP', 'METAREA', 'OWNERSHP', 'ASECWT', 'AGE', 'SEX', 'RACE', 'MARST', 'POPSTAT',
-                                  'ASIAN', 'VETSTAT', 'CITIZEN', 'HISPAN', 'NATIVITY', 'OCC2010', 'CLASSWKR',
-                                  'UHRSWORK1', 'PROFCERT', 'EDUC99', 'DIFFANY']
-                                       )
+        input_variables = pd.DataFrame([[state,age,gender,race,emphlth,milhlth,military,nativ, 0.0, job, emp, hours, prof, educ, privhlth]],
+                                       columns=['STATEFIP', 'AGE', 'SEX', 'RACE', 'PAIDGH', 'HICHAMP',
+                                                'VETSTAT', 'NATIVITY', 'HISPAN', 'OCC2010', 'EMPSAME',
+                                                'UHRSWORK1', 'PROFCERT', 'EDUC99', 'PHINSUR'])
         prediction = model.predict(input_variables)[0]
 #         prediction = 100
         return flask.render_template('main.html',
                                      original_input={'salary':salary,
                                                      'gender':gender,
-                                                     'age':age},
-                                     result=prediction-salary,
+                                                     'age':age,
+                                                     'job':job,
+                                                     'military':military,
+                                                     'emp':emp,
+                                                     'emphlth':emphlth,
+                                                     'privhlth':privhlth,
+                                                     'milhlth':milhlth,
+                                                     'race':race,
+                                                     'nativ':nativ,
+                                                     'hours':hours,
+                                                     'educ':educ,
+                                                     'prof':prof,
+                                                     'state':state},
+                                     result=prediction,
                                      )
 
 
