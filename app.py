@@ -7,10 +7,14 @@ Much of this was sourced from Cambridge Spark's tutorial at https://blog.cambrid
 import flask
 import pickle
 import pandas as pd
+from final_model import MLP
 # Use pickle to load in the pre-trained model.
-with open(f'f_model.pt', 'rb') as f:
-    model = pickle.load(f)
+# with open(f'f_model.pt', 'rb') as f:
+#     model = pickle.load(f)
 
+model = MLP(15)
+model.load_state_dict(torch.load('./f_model_v3.pt'))
+model.eval()
 
 app = flask.Flask(__name__, template_folder='templates')
 
